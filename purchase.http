@@ -1,0 +1,10 @@
+POST http://localhost:6969/purchase
+
+Content-Type: application/json
+
+{
+  "p_id":1,
+  "p_name":"Shubman Gill GT",
+  "team_id": 1,
+  "team_name": "CSK"
+}
