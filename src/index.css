@@ -3,7 +3,8 @@
 
 @theme {
   --font-inter: 'Inter', sans-serif;
-  --color-primary: #222831;
-  --color-secondary: #00ADB5;
-  --color-white: #EEEEEE;
-  --color-black: #393E46; }
+  --color-primary: #FFF5CD;
+  --color-secondary: #B7E0FF;
+  --color-pink: #FFCFB3;
+  --color-red: #E78F81
+}
