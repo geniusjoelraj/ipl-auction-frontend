@@ -85,32 +85,36 @@ export default function PlayerSelect({ onSelect, selected, setSelected }) {
   }
 
   return (
-    <div className="grid grid-cols-2 grid-rows-5 gap-2 scale-75 font-semibold">
-      {iplTeams.map((team) => {
-        const isSelected = selected === team.name;
-        const isGreyedOut = selected !== null && !isSelected;
+    <div className="flex-col font-semibold bg-gradient-to-br from-[#181832] to-[#212147] rounded-2xl p-15 scale-90 shadow-2xl">
+      <h1 className="text-3xl font-bold text-[#fcd814] ">ipl Teams</h1>
+      <div className="grid grid-cols-2 grid-rows-5 gap-2 ">
+        {iplTeams.map((team) => {
+          const isSelected = selected === team.name;
+          const isGreyedOut = selected !== null && !isSelected;
 
-        return (
-          <div
-            key={team.short}
-            className={`flex flex-col items-center justify-center gap-1 p-3 m-2 rounded-md w-32 cursor-pointer transition-all duration-300
+          return (
+            <div
+              key={team.short}
+              className={`flex flex-col items-center justify-center gap-1 p-3 m-2 rounded-md w-32 cursor-pointer 
               ${isSelected
-                ? "bg-green-400 text-white"
-                : isGreyedOut
-                  ? "bg-gray-400 text-gray-100"
-                  : `${team.bgColor} ${team.textColor}`
-              }`}
-            onClick={() => toggle(team.name)}
-          >
-            <img
-              className="h-10 w-10 object-cover"
-              src={team.logo}
-              alt={team.short}
-            />
-            <p className="text-sm">{team.short}</p>
-          </div>
-        );
-      })}
+                  ? "bg-green-400 text-white"
+                  : isGreyedOut
+                    ? "bg-gray-400 text-gray-100"
+                    : `${team.bgColor} ${team.textColor}`
+                }`}
+              onClick={() => toggle(team.name)}
+            >
+              <img
+                className="h-10 w-10 object-cover"
+                src={team.logo}
+                alt={team.short}
+              />
+              <p className="text-sm">{team.short}</p>
+            </div>
+          );
+        })}
+      </div>
+
     </div>
   );
 }
