@@ -1,4 +1,4 @@
-export default function Stats({ stats }) {
+export default function BatsmenStats({ stats }) {
   return (
     <>
       <div className="flex flex-col bg-gradient-to-br from-[#181832] to-[#212147] p-10 rounded-2xl shadow-2xl">

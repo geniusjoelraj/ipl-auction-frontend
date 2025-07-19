@@ -8,3 +8,15 @@
   --color-pink: #FFCFB3;
   --color-red: #E78F81
 }
+
+/* Hide arrows in input[type=number] for Chrome, Safari, Edge */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide arrows in input[type=number] for Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
