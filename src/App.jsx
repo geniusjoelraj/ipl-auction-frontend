@@ -10,13 +10,15 @@ function App() {
   const [go, setGo] = useState(1)
   const [stats, setStats] = useState({})
   const [purchase, setPurchase] = useState(null)
-  const [selected, setSelected] = useState(purchase?.team_name || null);
+  const [selected, setSelected] = useState(null); // Fixed: removed reference to undefined purchase
   const [type, setType] = useState("batsmen")
-  const [price, setPrice] = useState(stats.price)
+  const [price, setPrice] = useState(1000000000); // Fixed: set default value directly
+  const [teamId, setTeamId] = useState(null)
 
   useEffect(() => {
     axios.get(`http://localhost:8080/${type}/${pos}`)
       .then((res) => {
+        res.data.price = 100000;
         setStats(res.data)
         setPrice(res.data.price)
         console.log(res.data)
@@ -31,26 +33,39 @@ function App() {
     bowlers: "Bowler",
     "all_rounders": "All Rounder"
   };
+  const ptype = {
+    batsmen: "batsman",
+    bowlers: "bowler",
+    "all_rounders": "all_rounder"
+  }
 
   useEffect(() => {
-
+    if (!purchase || !purchase.playerId || !purchase.teamId) return;
 
     axios.post("http://localhost:8080/purchase", purchase)
       .then((res) => {
         console.log(res)
       })
-  }, [purchase])
+      .catch((err) => {
+        console.log(err.response?.data);
+      });
+  }, [purchase]);
 
   const handleSelect = (team) => {
     console.log(team)
-    setPurchase({
-      "p_id": pos,
-      "p_name": stats.name,
-      "team_id": pos,
-      "team_name": team
-    })
-  };
 
+    if (team) {
+      const order = {
+        "playerId": pos,
+        "soldPrice": price,
+        "teamId": teamId,
+        "playerType": ptype[type]
+      }
+      setPurchase(order)
+    } else {
+      setPurchase(null)
+    }
+  };
 
   function formatToCrores(num) {
     if (typeof num !== 'number' || isNaN(num)) return '';
@@ -61,7 +76,7 @@ function App() {
       return `${(num / 100000).toFixed(1).replace(/\.0$/, '')}L`;
     }
 
-    return num.toLocaleString('en-IN'); // e.g., 95,000 or below
+    return num.toLocaleString('en-IN');
   }
 
   return (
@@ -102,7 +117,7 @@ function App() {
             {type === "batsmen" && <BatsmenStats stats={stats} />}
             {type === "bowlers" && <BowlerStats stats={stats} />}
             {type === "all_rounders" && <AllRounderStats stats={stats} />}
-            <PlayerSelect onSelect={handleSelect} selected={selected} setSelected={setSelected} />
+            <PlayerSelect setTeamId={setTeamId} onSelect={handleSelect} selected={selected} setSelected={setSelected} />
           </div>
           <div className="w-screen">
             <div className="absolute bottom-1 flex w-[100%] ml-10 px-5 justify-between mb-3">
@@ -117,12 +132,11 @@ function App() {
               </button>
               <div className="font-inter font-bold text-5xl flex justify-center items-center gap-5 flex-col">
                 <div className="">₹{formatToCrores(price)}</div>
-                <input type="number" className="outline-none w-30 bg-[#2B2C5C] text-lg h-8 absolute top-15" value={price} onChange={(e) => setPrice(Number(e.target.value))} />
               </div>
               <button
                 className="bg-[#DE701A] px-8 py-2 rounded-full hover:bg-[#DE701A]/80 transition-all duration-300 cursor-pointer"
                 onClick={() => {
-                  setPos(p => Number(pos) + 1)
+                  setPos(p => p + 1)
                   setSelected(null)
                 }}
               >
@@ -130,15 +144,16 @@ function App() {
               </button>
             </div>
             <div className="absolute z-10 top-0 right-[-20px] group">
-              <button className="bg-[#2B2C5C] px-3 py-2 rounded-md m-3 hover:bg-[#2B2C5C]/80 transition-all duration-300 cursor-pointer" onClick={() => { setPos(go) }}>
+              <button className="bg-[#2B2C5C] px-3 py-2 rounded-md m-3 hover:bg-[#2B2C5C]/80 transition-all duration-300 cursor-pointer" onClick={() => { setPos(Number(go)) }}> {/* Fixed: ensure go is converted to number */}
                 Go
               </button>
-              <input className="bg-[#2B2C5C] w-14 outline-none hidden group-hover:inline absolute top-13 left-0  text-white ml-3 text-sm h-8 p-3" placeholder="Pos" value={go} onChange={(e) => setGo(e.target.value)} type="number" />
+              <input className="bg-[#2B2C5C] w-14 outline-none hidden group-hover:inline absolute top-13 left-0  text-white ml-3 text-sm h-8 p-3" placeholder="Pos" value={go} onChange={(e) => setGo(Number(e.target.value) || 1)} type="number" /> {/* Fixed: handle invalid input */}
             </div>
 
           </div>
         </div>
 
+        <input type="number" className="outline-none w-30 bg-[#2B2C5C] text-lg h-8 absolute bottom-0 right-0" value={price} onChange={(e) => setPrice(Number(e.target.value) || 0)} /> {/* Fixed: handle invalid input */}
       </div>
     </>
   )

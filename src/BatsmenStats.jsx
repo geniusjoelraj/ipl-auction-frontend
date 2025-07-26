@@ -1,8 +1,7 @@
-
 export default function BatsmenStats({ stats }) {
   return (
     <>
-      <div className="flex flex-col bg-gradient-to-br from-[#181832] to-[#212147] p-10 rounded-2xl shadow-2xl">
+      <div className="flex flex-col bg-gradient-to-br from-[#181832] to-[#212147] p-10 rounded-2xl shadow-2xl text-nowrap">
         <p className="text-3xl font-bold text-[#fcd814]">Career Stats</p>
         <div className="text-3xl grid grid-cols-2 p-5 gap-5">
           <div className="bg-[#2B2C5C] p-3 rounded-md shadow-2xl">

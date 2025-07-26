@@ -73,13 +73,16 @@ const iplTeams = [
   },
 ];
 
-export default function PlayerSelect({ onSelect, selected, setSelected }) {
+export default function PlayerSelect({ onSelect, selected, setSelected, setTeamId }) {
 
 
-  function toggle(teamName) {
+  function toggle(teamName, teamId) {
     setSelected((prev) => {
       const next = prev === teamName ? null : teamName;
       onSelect(next);
+      setTeamId(teamId)
+      console.log(teamId)
+
       return next;
     });
   }
@@ -102,7 +105,7 @@ export default function PlayerSelect({ onSelect, selected, setSelected }) {
                     ? "bg-gray-400 text-gray-100"
                     : `${team.bgColor} ${team.textColor}`
                 }`}
-              onClick={() => toggle(team.name)}
+              onClick={() => toggle(team.name, team.short)}
             >
               <img
                 className="h-10 w-10 object-cover"
